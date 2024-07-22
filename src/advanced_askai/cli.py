@@ -37,9 +37,6 @@ def cli() -> int:
     else:
         model = args.model
 
-    if args.code:
-        return os.system("aicode")
-
     if args.set_key:
         config["openai_key"] = args.set_key
         save_config(config)
@@ -70,16 +67,12 @@ def cli() -> int:
     log(prompt)
     prompts = [prompt]
 
-    force_color = args.color
-    if force_color is None:
-        force_color = False
-
     chatbot = ChatBot(
         openai_key=key,
         max_tokens=max_tokens,
         model=model,
         ai_assistant_prompt=ai_assistant_prompt,
-        force_color=force_color,
+        force_color=args.color,
     )
 
     while True:

@@ -12,7 +12,9 @@ def parse_args() -> argparse.Namespace:
     argparser.add_argument("--json", help="Print response as json", action="store_true")
     argparser.add_argument("--set-key", help="Set OpenAI key")
     argparser.add_argument("--output", help="Output file")
-    argparser.add_argument("--color", help="Output color", action="store_true")
+    argparser.add_argument(
+        "--color", help="Output color", action="store_true", default=False
+    )
 
     model_group = argparser.add_mutually_exclusive_group()
     model_group.add_argument(
