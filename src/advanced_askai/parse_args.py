@@ -1,6 +1,6 @@
 import argparse
 
-from advanced_askai.constants import ADVANCED_MODEL, AI_ASSISTANT, FAST_MODEL
+from advanced_askai.constants import ADVANCED_MODEL, AI_ASSISTANT
 
 
 def parse_args() -> argparse.Namespace:
@@ -11,18 +11,12 @@ def parse_args() -> argparse.Namespace:
     )
     argparser.add_argument("--json", help="Print response as json", action="store_true")
     argparser.add_argument("--set-key", help="Set OpenAI key")
-    argparser.add_argument("--output", help="Output file")
+    argparser.add_argument("--output", help="Output file", type=str)
     argparser.add_argument(
         "--color", help="Output color", action="store_true", default=False
     )
 
     model_group = argparser.add_mutually_exclusive_group()
-    model_group.add_argument(
-        "--fast",
-        action="store_true",
-        default=False,
-        help=f"chat gpt 4o mini: {FAST_MODEL}",
-    )
     model_group.add_argument(
         "--advanced",
         action="store_true",
