@@ -34,8 +34,16 @@ class SinglePromptTester(unittest.TestCase):
         IS_AUTHENTICATED, "Authentication required to run this unit test"
     )
     def test_cli(self) -> None:
-        COMMAND = 'askai "Respond with HELLO"'
-        output = subprocess.check_output(COMMAND, shell=True, text=True)
+        command = 'askai "Respond with HELLO"'
+        output = subprocess.check_output(command, shell=True, text=True)
+        self.assertIn("HELLO", output)
+
+    @unittest.skipUnless(
+        IS_AUTHENTICATED, "Authentication required to run this unit test"
+    )
+    def test_cli_advanced(self) -> None:
+        command = 'askai "Respond with HELLO" --advanced'
+        output = subprocess.check_output(command, shell=True, text=True)
         self.assertIn("HELLO", output)
 
 
