@@ -4,6 +4,7 @@ import time
 
 
 def prompt_input() -> str:
+    """Prompts for input until two empty lines are entered."""
     lines: list[str] = []
     empty_count = 0
     response_times: list[float] = []

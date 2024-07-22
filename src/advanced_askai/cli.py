@@ -64,6 +64,7 @@ def cli() -> int:
             as_json=args.json,
             no_stream=args.no_stream,
             check=args.check,
+            prompt_input_func=prompt_input,
         )
     except ChatGPTConnectionError as err:
         print(err)

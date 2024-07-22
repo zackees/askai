@@ -1,9 +1,8 @@
 import os
-from typing import Optional
+from typing import Callable, Optional
 
 from advanced_askai.chatgpt import ChatBot
 from advanced_askai.constants import AI_ASSISTANT_CHECKER_PROMPT
-from advanced_askai.prompt_input import prompt_input
 from advanced_askai.run_chat_query import run_chat_query
 from advanced_askai.streams import NullOutStream, OutStream
 
@@ -16,6 +15,7 @@ def interactive_chat_session(
     as_json: bool,
     no_stream: bool,
     check: bool,
+    prompt_input_func: Callable[[], str],
 ) -> int:
     """Runs a chat query, throws exceptions if there are issues"""
     interactive = not prompt
@@ -38,7 +38,7 @@ def interactive_chat_session(
                 new_cmd = new_cmd[1:]
                 rtn = os.system(new_cmd)
                 print(f"Command exited and returned {rtn}")
-                prompts.append(prompt_input())
+                prompts.append(prompt_input_func())
                 continue
             elif new_cmd == "exit":
                 print("Exited due to 'exit' command")
@@ -77,6 +77,6 @@ def interactive_chat_session(
                 return 0
 
             # next loop.
-            prompts.append(prompt_input())
+            prompts.append(prompt_input_func())
         finally:
             output_stream.close()
