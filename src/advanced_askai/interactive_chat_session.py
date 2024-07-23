@@ -45,7 +45,7 @@ def internal_iterate_chat_session(
 
 def internal_single_chat_session(
     chatbot: ChatBot,
-    prompt: str,
+    prompts: list[str],
     outstream: Stream,
     as_json: bool,
     no_stream: bool,
@@ -53,7 +53,6 @@ def internal_single_chat_session(
     status_print_func: Callable[[str], None],
 ) -> str:
     """Runs a single chat query, throws exceptions if there are issues"""
-    prompts = [prompt]
     return internal_iterate_chat_session(
         chatbot=chatbot,
         prompts=prompts,

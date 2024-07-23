@@ -67,7 +67,7 @@ def cli() -> int:
         if not interactive:
             internal_single_chat_session(
                 chatbot=chatbot,
-                prompt=prompt,
+                prompts=[prompt],
                 outstream=outstream,
                 as_json=args.json,
                 check=args.check,

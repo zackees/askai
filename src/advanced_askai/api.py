@@ -35,7 +35,7 @@ def interactive_chat_session(
 
 def single_query(
     chatbot: ChatBot,
-    prompt: str,
+    prompt: str | list[str],
     outstream: Stream | None = None,
     as_json: bool = False,
     no_stream: bool = False,
@@ -44,9 +44,13 @@ def single_query(
 ) -> str:
     """Runs a single chat query, throws exceptions if there are issues"""
     outstream = outstream or ConsoleStream()
+    if isinstance(prompt, str):
+        prompts = [prompt]
+    else:
+        prompts = prompt
     return internal_single_chat_session(
         chatbot=chatbot,
-        prompt=prompt,
+        prompts=prompts,
         outstream=outstream,
         as_json=as_json,
         no_stream=no_stream,

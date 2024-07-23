@@ -133,7 +133,6 @@ class ChatBot:
     ):
         self.openai_key = openai_key
         self.model = model
-        self.prompts: list[str] = []
         self.max_tokens = max_tokens
         self.ai_assistant_prompt = ai_assistant_prompt
 
