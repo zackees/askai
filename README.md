@@ -1,5 +1,4 @@
-# template-python-cmd
-A template for quickly making a python lib that has a command line program attached
+# advanced-askai
 
 [![Linting](../../actions/workflows/lint.yml/badge.svg)](../../actions/workflows/lint.yml)
 
@@ -7,8 +6,11 @@ A template for quickly making a python lib that has a command line program attac
 [![Ubuntu_Tests](../../actions/workflows/push_ubuntu.yml/badge.svg)](../../actions/workflows/push_ubuntu.yml)
 [![Win_Tests](../../actions/workflows/push_win.yml/badge.svg)](../../actions/workflows/push_win.yml)
 
-Replace `template-python-cmd` and `template_python_cmd` with your command. Run tox until it's
-correct.
+A chatbot for your terminal. Has api bindings to run in python code.
+
+See advanced_askai.api.*
+
+# Develope
 
 To develop software, run `. ./activate.sh`
 
