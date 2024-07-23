@@ -8,6 +8,7 @@ from typing import Callable
 from advanced_askai.chatgpt import ChatBot
 from advanced_askai.constants import FAST_MODEL
 from advanced_askai.interactive_chat_session import interactive_chat_session
+from advanced_askai.streams import NullOutStream
 from advanced_askai.util import authentication_exists, get_authentication
 
 IS_AUTHENTICATED = authentication_exists()
@@ -50,7 +51,7 @@ class InteractiveSessionTester(unittest.TestCase):
         interactive_chat_session(
             chatbot=chatbot,
             prompts=[],
-            output=None,
+            outstream=NullOutStream(),
             as_json=False,
             no_stream=True,
             check=False,

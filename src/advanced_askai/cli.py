@@ -15,6 +15,7 @@ from advanced_askai.interactive_chat_session import (
 from advanced_askai.openaicfg import create_or_load_config, save_config
 from advanced_askai.parse_args import parse_args
 from advanced_askai.prompt_input import prompt_input
+from advanced_askai.streams import ConsoleStream, FileOutputStream, MultiStream, Stream
 from advanced_askai.util import (
     get_model_max_tokens,
     load_or_prompt_for_api_key_and_return_config,
@@ -34,7 +35,7 @@ def cli() -> int:
     config = load_or_prompt_for_api_key_and_return_config(args)
     key = config["openai_key"]
 
-    prompt = args.prompt or prompt_input()
+    prompt = args.prompt
 
     def log(*pargs, **kwargs):
         if not args.verbose:
@@ -57,13 +58,18 @@ def cli() -> int:
         force_color=args.color,
     )
 
+    streams: list[Stream] = [ConsoleStream(force_color=args.color)]
+    if args.output:
+        streams.append(FileOutputStream(args.output))
+    outstream = MultiStream(streams)
+
     try:
         interactive = prompt is None
         if not interactive:
             single_chat_session(
                 chatbot=chatbot,
                 prompt=prompt,
-                output=args.output,
+                outstream=outstream,
                 as_json=args.json,
                 check=args.check,
                 no_stream=args.no_stream,
@@ -76,7 +82,7 @@ def cli() -> int:
         interactive_chat_session(
             chatbot=chatbot,
             prompts=[],
-            output=args.output,
+            outstream=outstream,
             as_json=args.json,
             no_stream=args.no_stream,
             check=args.check,

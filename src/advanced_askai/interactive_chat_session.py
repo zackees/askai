@@ -1,16 +1,16 @@
 import os
-from typing import Callable, Optional
+from typing import Callable
 
 from advanced_askai.chatgpt import ChatBot
 from advanced_askai.constants import AI_ASSISTANT_CHECKER_PROMPT
 from advanced_askai.run_chat_query import run_chat_query
-from advanced_askai.streams import NullOutStream, OutStream
+from advanced_askai.streams import NullOutStream, Stream
 
 
 def _iterate_chat_session(
     chatbot: ChatBot,
     prompts: list[str],
-    output: Optional[str],
+    outstream: Stream,
     as_json: bool,
     no_stream: bool,
     check: bool,
@@ -18,47 +18,35 @@ def _iterate_chat_session(
 ) -> str:
     """Runs a single chat query, throws exceptions if there are issues"""
     assert len(prompts) % 2 == 1, "Prompt count should be odd"
-    output_stream: OutStream = OutStream(output)
-    if check:
-        # if we're checking, we need to use a null output stream
-        output_stream.close()
-        output_stream = NullOutStream()
-    try:
-        response_text = run_chat_query(
-            chatbot=chatbot,
-            prompts=prompts,
-            output_stream=output_stream,
-            as_json=as_json,
-            no_stream=no_stream,
-            output=output,
-            print_status=True,
-        )
-        if not check:
-            return response_text
-        prompts.append(response_text)
-        output_stream.close()
-        output_stream = OutStream(output)
-        check_prompt = AI_ASSISTANT_CHECKER_PROMPT + "\n\n" + prompts[-1]
-        prompts.append(check_prompt)
-        status_print_func("\n############ CHECKING RESPONSE")
-        response_text = run_chat_query(
-            chatbot=chatbot,
-            prompts=prompts,
-            output_stream=output_stream,
-            as_json=as_json,
-            no_stream=no_stream,
-            output=output,
-            print_status=False,
-        )
+    response_text = run_chat_query(
+        chatbot=chatbot,
+        prompts=prompts,
+        outstream=NullOutStream() if check else outstream,
+        as_json=as_json,
+        no_stream=no_stream,
+        print_status=True,
+    )
+    if not check:
         return response_text
-    finally:
-        output_stream.close()
+    prompts.append(response_text)
+    check_prompt = AI_ASSISTANT_CHECKER_PROMPT + "\n\n" + prompts[-1]
+    prompts.append(check_prompt)
+    status_print_func("\n############ CHECKING RESPONSE")
+    response_text = run_chat_query(
+        chatbot=chatbot,
+        prompts=prompts,
+        outstream=outstream,
+        as_json=as_json,
+        no_stream=no_stream,
+        print_status=False,
+    )
+    return response_text
 
 
 def single_chat_session(
     chatbot: ChatBot,
     prompt: str,
-    output: Optional[str],
+    outstream: Stream,
     as_json: bool,
     no_stream: bool,
     check: bool,
@@ -69,7 +57,7 @@ def single_chat_session(
     return _iterate_chat_session(
         chatbot=chatbot,
         prompts=prompts,
-        output=output,
+        outstream=outstream,
         as_json=as_json,
         no_stream=no_stream,
         check=check,
@@ -80,7 +68,7 @@ def single_chat_session(
 def interactive_chat_session(
     chatbot: ChatBot,
     prompts: list[str],
-    output: Optional[str],
+    outstream: Stream,
     as_json: bool,
     no_stream: bool,
     check: bool,
@@ -111,7 +99,7 @@ def interactive_chat_session(
         response_text = _iterate_chat_session(
             chatbot=chatbot,
             prompts=prompts,
-            output=output,
+            outstream=outstream,
             as_json=as_json,
             no_stream=no_stream,
             check=check,
