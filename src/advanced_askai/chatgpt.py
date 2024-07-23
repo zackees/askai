@@ -9,9 +9,28 @@ from typing import Any, Optional
 import json5 as json
 import openai
 import tiktoken
-from openai import APIConnectionError, AuthenticationError, OpenAI
+from openai import APIConnectionError, AuthenticationError, BadRequestError, OpenAI
 
 from advanced_askai.constants import ADVANCED_MODEL, HIDDEN_PROMPT_TOKEN_COUNT
+
+
+def is_valid_api_key(api_key: str) -> bool:
+    """
+    Test whether the given OpenAI API key is valid.
+
+    :param api_key: The OpenAI API key to test
+    :return: True if the key is valid, False otherwise
+    """
+    client = OpenAI(api_key=api_key)
+    try:
+        # Attempt to list models, which requires a valid API key
+        client.models.list()
+        return True
+    except AuthenticationError:
+        return False
+    except (APIConnectionError, BadRequestError):
+        # If there's a connection error or bad request, we can't determine if the key is valid
+        raise
 
 
 def get_max_tokens(model: str) -> int:

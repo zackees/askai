@@ -9,9 +9,9 @@ from advanced_askai.chatgpt import ChatGpt
 from advanced_askai.constants import FAST_MODEL
 from advanced_askai.internal_chat_session import internal_interactive_chat_session
 from advanced_askai.streams import ConsoleStream
-from advanced_askai.util import authentication_exists, get_authentication
+from advanced_askai.util import authenticaion_valid, get_authentication
 
-IS_AUTHENTICATED = authentication_exists()
+IS_AUTHENTICATED = authenticaion_valid()
 
 
 def _fake_prompt_generator(return_values: list[str]) -> Callable[[], str]:

@@ -5,9 +5,9 @@ Unit test file.
 import subprocess
 import unittest
 
-from advanced_askai.util import authentication_exists
+from advanced_askai.util import authenticaion_valid
 
-IS_AUTHENTICATED = authentication_exists()
+IS_AUTHENTICATED = authenticaion_valid()
 
 
 class SingleCheckedPromptTester(unittest.TestCase):

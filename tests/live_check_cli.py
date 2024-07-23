@@ -5,9 +5,9 @@ Unit test file.
 import unittest
 
 from advanced_askai.cli import cli
-from advanced_askai.util import authentication_exists, get_authentication
+from advanced_askai.util import authenticaion_valid, get_authentication
 
-IS_AUTHENTICATED = authentication_exists()
+IS_AUTHENTICATED = authenticaion_valid()
 
 
 class InteractiveSessionTester(unittest.TestCase):
