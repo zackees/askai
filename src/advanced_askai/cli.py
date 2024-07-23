@@ -56,7 +56,7 @@ def cli() -> int:
     )
 
     try:
-        rtn: int = interactive_chat_session(
+        interactive_chat_session(
             chatbot=chatbot,
             prompt=prompt,
             prompts=prompts,
@@ -65,6 +65,7 @@ def cli() -> int:
             no_stream=args.no_stream,
             check=args.check,
             prompt_input_func=prompt_input,
+            status_print_func=print,
         )
     except ChatGPTConnectionError as err:
         print(err)
@@ -79,7 +80,7 @@ def cli() -> int:
     except ChatGPTRateLimitError:
         print("Rate limit exceeded, set a new key with --set-key")
         return 1
-    return rtn
+    return 0
 
 
 def main() -> int:
