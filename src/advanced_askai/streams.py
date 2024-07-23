@@ -1,7 +1,6 @@
+import sys
 from abc import ABC, abstractmethod
 from typing import List
-
-from advanced_askai.streaming_console import StreamingConsole
 
 
 class Stream(ABC):
@@ -23,13 +22,12 @@ class FileOutputStream(Stream):
 
 
 class ConsoleStream(Stream):
-    def __init__(self, force_color: bool = False):
-        self.color_term = StreamingConsole()
-        if force_color:
-            self.color_term.force_color()
+    def __init__(self):
+        pass
 
     def write(self, text: str) -> None:
-        self.color_term.update(text)
+        sys.stdout.write(text)
+        sys.stdout.flush()
 
 
 class MultiStream(Stream):

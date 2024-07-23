@@ -2,7 +2,7 @@ import os
 import re
 import shutil
 import sys
-from typing import Optional, Union
+from typing import Optional
 
 import colorama
 from colorama import AnsiToWin32
@@ -132,42 +132,3 @@ class StreamingConsoleMarkdown:
         clr_msg = _get_clear_line_sequence(2)
         sys.stdout.write("\n" + clr_msg)
         sys.stdout.flush()
-
-
-class StreamingConsolePlain:
-    def __init__(self):
-        self.last_written_text = ""
-
-    def update(self, text: str) -> str:
-        n = len(self.last_written_text)
-        new_text = text[n:]
-        if new_text:
-            self.last_written_text = text
-            sys.stdout.write(new_text)
-            sys.stdout.flush()
-        return text
-
-
-def get_streaming_console() -> Union[StreamingConsoleMarkdown, StreamingConsolePlain]:
-    is_windows = os.name == "nt"
-    if is_windows:
-        is_gitbash = "MSYSTEM" in os.environ
-        if is_gitbash:
-            return StreamingConsolePlain()
-        is_cmd_exe = "ComSpec" in os.environ
-        if is_cmd_exe:
-            return StreamingConsolePlain()
-    return StreamingConsolePlain()
-
-
-class StreamingConsole:
-    def __init__(self) -> None:
-        self.impl: Union[StreamingConsoleMarkdown, StreamingConsolePlain] = (
-            get_streaming_console()
-        )
-
-    def force_color(self) -> None:
-        self.impl = StreamingConsoleMarkdown()
-
-    def update(self, text: str) -> None:
-        self.impl.update(text)

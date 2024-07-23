@@ -33,8 +33,8 @@ def run_chat_query(
         if text is None:
             break
         response_text += text
-        outstream.write(response_text)
-    outstream.write(response_text + "\n")
+        outstream.write(text)
+    outstream.write("\n\n")
 
     # return None
     return response_text

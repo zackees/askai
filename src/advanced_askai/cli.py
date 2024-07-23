@@ -73,7 +73,7 @@ def cli() -> int:
         ai_assistant_prompt=ai_assistant_prompt,
     )
 
-    streams: list[Stream] = [ConsoleStream(force_color=args.color)]
+    streams: list[Stream] = [ConsoleStream()]
     if args.output:
         streams.append(FileOutputStream(args.output))
     outstream = MultiStream(streams)
