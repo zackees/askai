@@ -11,7 +11,13 @@ import openai
 import tiktoken
 from openai import APIConnectionError, AuthenticationError, OpenAI
 
-from advanced_askai.constants import HIDDEN_PROMPT_TOKEN_COUNT
+from advanced_askai.constants import ADVANCED_MODEL, HIDDEN_PROMPT_TOKEN_COUNT
+
+
+def get_max_tokens(model: str) -> int:
+    if model == ADVANCED_MODEL:
+        return 4096
+    return 16384
 
 
 class ChatGPTConnectionError(APIConnectionError):
@@ -127,13 +133,17 @@ class ChatStream:
             yield all_str
 
 
-class ChatBot:
+class ChatGpt:
     def __init__(
-        self, openai_key: str, model: str, max_tokens: int, ai_assistant_prompt: str
+        self,
+        openai_key: str,
+        model: str,
+        ai_assistant_prompt: str,
+        max_tokens: int | None = None,
     ):
         self.openai_key = openai_key
         self.model = model
-        self.max_tokens = max_tokens
+        self.max_tokens = max_tokens or get_max_tokens(model)
         self.ai_assistant_prompt = ai_assistant_prompt
 
     def query(

@@ -1,14 +1,14 @@
 import os
 from typing import Callable
 
-from advanced_askai.chatgpt import ChatBot
+from advanced_askai.chatgpt import ChatGpt
 from advanced_askai.constants import AI_ASSISTANT_CHECKER_PROMPT
 from advanced_askai.run_chat_query import run_chat_query
 from advanced_askai.streams import NullOutStream, Stream
 
 
 def internal_iterate_chat_session(
-    chatbot: ChatBot,
+    chatbot: ChatGpt,
     prompts: list[str],
     outstream: Stream,
     as_json: bool,
@@ -44,7 +44,7 @@ def internal_iterate_chat_session(
 
 
 def internal_single_chat_session(
-    chatbot: ChatBot,
+    chatbot: ChatGpt,
     prompts: list[str],
     outstream: Stream,
     as_json: bool,
@@ -65,7 +65,7 @@ def internal_single_chat_session(
 
 
 def internal_interactive_chat_session(
-    chatbot: ChatBot,
+    chatbot: ChatGpt,
     prompts: list[str],
     outstream: Stream,
     as_json: bool,

@@ -5,7 +5,7 @@ Unit test file.
 import unittest
 from typing import Callable
 
-from advanced_askai.chatgpt import ChatBot
+from advanced_askai.chatgpt import ChatGpt
 from advanced_askai.constants import FAST_MODEL
 from advanced_askai.internal_chat_session import internal_interactive_chat_session
 from advanced_askai.streams import NullOutStream
@@ -41,7 +41,7 @@ class InteractiveSessionTester(unittest.TestCase):
         openai_key = get_authentication()
         assert openai_key is not None
 
-        chatbot = ChatBot(
+        chatbot = ChatGpt(
             openai_key=openai_key,
             max_tokens=1024,
             model=FAST_MODEL,

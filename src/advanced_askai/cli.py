@@ -1,13 +1,16 @@
 """askai - ask openai for help"""
 
+import argparse
 import sys
 
 from advanced_askai.chatgpt import (
-    ChatBot,
+    ChatGpt,
     ChatGPTAuthenticationError,
     ChatGPTConnectionError,
     ChatGPTRateLimitError,
+    get_max_tokens,
 )
+from advanced_askai.constants import ADVANCED_MODEL, FAST_MODEL
 from advanced_askai.internal_chat_session import (
     internal_interactive_chat_session,
     internal_single_chat_session,
@@ -16,10 +19,23 @@ from advanced_askai.openaicfg import create_or_load_config, save_config
 from advanced_askai.parse_args import parse_args
 from advanced_askai.prompt_input import prompt_input
 from advanced_askai.streams import ConsoleStream, FileOutputStream, MultiStream, Stream
-from advanced_askai.util import (
-    get_model_max_tokens,
-    load_or_prompt_for_api_key_and_return_config,
-)
+from advanced_askai.util import load_or_prompt_for_api_key_and_return_config
+
+
+def get_model_max_tokens(args: argparse.Namespace) -> tuple[str, int]:
+    max_tokens = args.max_tokens
+    model: str
+    if args.model is None:
+        if args.advanced:
+            model = ADVANCED_MODEL
+        else:
+            model = FAST_MODEL
+    else:
+        model = args.model
+
+    if max_tokens is None:
+        max_tokens = get_max_tokens(model)
+    return model, max_tokens
 
 
 def cli() -> int:
@@ -50,7 +66,7 @@ def cli() -> int:
 
     log(prompt)
 
-    chatbot = ChatBot(
+    chatbot = ChatGpt(
         openai_key=key,
         max_tokens=max_tokens,
         model=model,

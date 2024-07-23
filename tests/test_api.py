@@ -4,17 +4,14 @@ Unit test file.
 
 import unittest
 
-from advanced_askai.chatgpt import ChatGpt
+from advanced_askai.api import Chat, ChatBotConfig
 from advanced_askai.constants import FAST_MODEL
-from advanced_askai.internal_chat_session import internal_interactive_chat_session
-from advanced_askai.prompt_input import prompt_input
-from advanced_askai.streams import NullOutStream
 from advanced_askai.util import authentication_exists, get_authentication
 
 IS_AUTHENTICATED = authentication_exists()
 
 
-class InteractiveSessionTester(unittest.TestCase):
+class ApiTester(unittest.TestCase):
     """Main tester class."""
 
     @unittest.skipUnless(
@@ -26,23 +23,14 @@ class InteractiveSessionTester(unittest.TestCase):
         # self.assertEqual(0, rtn)
         openai_key = get_authentication()
         assert openai_key is not None
-
-        chatbot = ChatGpt(
-            openai_key=openai_key,
-            max_tokens=1024,
+        config = ChatBotConfig(
             model=FAST_MODEL,
+            api_key=openai_key,
             ai_assistant_prompt="You are a helpful assistant that always returns 'EXPECTED-MESSAGE', and nothing else",
         )
-        internal_interactive_chat_session(
-            chatbot=chatbot,
-            prompts=[],
-            outstream=NullOutStream(),
-            as_json=False,
-            no_stream=True,
-            check=False,
-            prompt_input_func=prompt_input,
-            status_print_func=print,
-        )
+        chat = Chat(config)
+        response = chat.query("test-input")
+        assert response == "EXPECTED-MESSAGE"
 
 
 if __name__ == "__main__":

@@ -1,11 +1,11 @@
 """askai - ask openai for help"""
 
-from advanced_askai.chatgpt import ChatBot, ChatStream
+from advanced_askai.chatgpt import ChatGpt, ChatStream
 from advanced_askai.streams import Stream
 
 
 def run_chat_query(
-    chatbot: ChatBot,
+    chatbot: ChatGpt,
     prompts: list[str],
     outstream: Stream,
     as_json: bool,
