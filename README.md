@@ -6,7 +6,18 @@
 [![Ubuntu_Tests](../../actions/workflows/push_ubuntu.yml/badge.svg)](../../actions/workflows/push_ubuntu.yml)
 [![Win_Tests](../../actions/workflows/push_win.yml/badge.svg)](../../actions/workflows/push_win.yml)
 
-A chatbot for your terminal. Has api bindings to run in python code.
+This package allows you to have a chat conversation with AI right from your terminal.
+
+Results are streamed to the console.
+
+It has api bindings to allow programatic access and can be used for other tools.
+
+The api key is stored using the secure keyring package. Right now we only support
+OpenAI's chatbot, but in the future I hope to include support for anthropics.
+
+The only stable api in this package is located at `advanced_askai.api`
+
+Binding to any other module in this library is subject to break.
 
 # Help
 

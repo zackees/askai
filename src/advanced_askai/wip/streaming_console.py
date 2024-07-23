@@ -1,3 +1,11 @@
+"""
+This is my attempt to get a colored streaming markdown renderer to work
+in windows/mac/linux. It turns out this is extremely hard because of line
+breaks. You can not simply stream to the console and must iteratively
+delete the last line and rewrite it. I just couldn't get it to work
+right so I've shelved this for now.
+"""
+
 import os
 import re
 import shutil
