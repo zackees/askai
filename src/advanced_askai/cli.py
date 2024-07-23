@@ -9,8 +9,8 @@ from advanced_askai.chatgpt import (
     ChatGPTRateLimitError,
 )
 from advanced_askai.interactive_chat_session import (
-    interactive_chat_session,
-    single_chat_session,
+    internal_interactive_chat_session,
+    internal_single_chat_session,
 )
 from advanced_askai.openaicfg import create_or_load_config, save_config
 from advanced_askai.parse_args import parse_args
@@ -55,7 +55,6 @@ def cli() -> int:
         max_tokens=max_tokens,
         model=model,
         ai_assistant_prompt=ai_assistant_prompt,
-        force_color=args.color,
     )
 
     streams: list[Stream] = [ConsoleStream(force_color=args.color)]
@@ -66,7 +65,7 @@ def cli() -> int:
     try:
         interactive = prompt is None
         if not interactive:
-            single_chat_session(
+            internal_single_chat_session(
                 chatbot=chatbot,
                 prompt=prompt,
                 outstream=outstream,
@@ -79,7 +78,7 @@ def cli() -> int:
         print(
             "\nInteractive mode - press return three times to submit your code to OpenAI"
         )
-        interactive_chat_session(
+        internal_interactive_chat_session(
             chatbot=chatbot,
             prompts=[],
             outstream=outstream,

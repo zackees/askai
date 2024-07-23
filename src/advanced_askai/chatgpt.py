@@ -129,19 +129,13 @@ class ChatStream:
 
 class ChatBot:
     def __init__(
-        self,
-        openai_key: str,
-        model: str,
-        max_tokens: int,
-        ai_assistant_prompt: str,
-        force_color: bool = False,
+        self, openai_key: str, model: str, max_tokens: int, ai_assistant_prompt: str
     ):
         self.openai_key = openai_key
         self.model = model
         self.prompts: list[str] = []
         self.max_tokens = max_tokens
         self.ai_assistant_prompt = ai_assistant_prompt
-        self.force_color = force_color
 
     def query(
         self,

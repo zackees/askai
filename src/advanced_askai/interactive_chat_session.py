@@ -7,7 +7,7 @@ from advanced_askai.run_chat_query import run_chat_query
 from advanced_askai.streams import NullOutStream, Stream
 
 
-def _iterate_chat_session(
+def internal_iterate_chat_session(
     chatbot: ChatBot,
     prompts: list[str],
     outstream: Stream,
@@ -43,18 +43,18 @@ def _iterate_chat_session(
     return response_text
 
 
-def single_chat_session(
+def internal_single_chat_session(
     chatbot: ChatBot,
     prompt: str,
     outstream: Stream,
     as_json: bool,
     no_stream: bool,
     check: bool,
-    status_print_func: Callable[[str], None] = print,
+    status_print_func: Callable[[str], None],
 ) -> str:
     """Runs a single chat query, throws exceptions if there are issues"""
     prompts = [prompt]
-    return _iterate_chat_session(
+    return internal_iterate_chat_session(
         chatbot=chatbot,
         prompts=prompts,
         outstream=outstream,
@@ -65,7 +65,7 @@ def single_chat_session(
     )
 
 
-def interactive_chat_session(
+def internal_interactive_chat_session(
     chatbot: ChatBot,
     prompts: list[str],
     outstream: Stream,
@@ -96,7 +96,7 @@ def interactive_chat_session(
             status_print_func("Exited due to 'exit' command")
             return
         assert len(prompts) % 2 == 1, "Prompt count should be odd"
-        response_text = _iterate_chat_session(
+        response_text = internal_iterate_chat_session(
             chatbot=chatbot,
             prompts=prompts,
             outstream=outstream,

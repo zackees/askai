@@ -7,7 +7,7 @@ from typing import Callable
 
 from advanced_askai.chatgpt import ChatBot
 from advanced_askai.constants import FAST_MODEL
-from advanced_askai.interactive_chat_session import interactive_chat_session
+from advanced_askai.interactive_chat_session import internal_interactive_chat_session
 from advanced_askai.streams import NullOutStream
 from advanced_askai.util import authentication_exists, get_authentication
 
@@ -46,9 +46,8 @@ class InteractiveSessionTester(unittest.TestCase):
             max_tokens=1024,
             model=FAST_MODEL,
             ai_assistant_prompt="You are a helpful assistant that always returns 'EXPECTED-MESSAGE', and nothing else",
-            force_color=False,
         )
-        interactive_chat_session(
+        internal_interactive_chat_session(
             chatbot=chatbot,
             prompts=[],
             outstream=NullOutStream(),
