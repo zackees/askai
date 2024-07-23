@@ -1,29 +1,35 @@
 import json
 import os
 
-from appdirs import user_config_dir  # type: ignore
+import keyring  # type: ignore
+
+# from appdirs import user_config_dir  # type: ignore
+
+SERVICE_NAME = "advanced-askai"
+# get the current user name
+USERNAME = os.getlogin()
 
 
-def get_config_path() -> str:
-    env_path = user_config_dir("zcmds", "zcmds", roaming=True)
-    config_file = os.path.join(env_path, "openai.json")
-    return config_file
+def _set_data(data: str) -> None:
+    keyring.set_password(SERVICE_NAME, USERNAME, data)
+
+
+def _get_data() -> str | None:
+    return keyring.get_password(SERVICE_NAME, USERNAME)
 
 
 def save_config(config: dict) -> None:
-    config_file = get_config_path()
-    # make all subdirs of config_file
-    os.makedirs(os.path.dirname(config_file), exist_ok=True)
-    with open(config_file, "w") as f:
-        json.dump(config, f)
+    data_str = json.dumps(config)
+    _set_data(data_str)
 
 
 def create_or_load_config() -> dict:
-    config_file = get_config_path()
     try:
-        with open(config_file) as f:
-            config = json.loads(f.read())
-        return config
+        data = _get_data()
+        if data is not None:
+            return json.loads(data)
+        save_config({})
+        return {}
     except OSError:
         save_config({})
         return {}

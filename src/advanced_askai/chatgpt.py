@@ -20,19 +20,22 @@ def get_max_tokens(model: str) -> int:
     return 16384
 
 
-class ChatGPTConnectionError(APIConnectionError):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+class ChatGPTConnectionError(BaseException):
+    def __init__(self, conn_error: APIConnectionError):
+        super().__init__(conn_error)
+        self.err = conn_error
 
 
-class ChatGPTAuthenticationError(AuthenticationError):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+class ChatGPTAuthenticationError(BaseException):
+    def __init__(self, auth_error: AuthenticationError):
+        super().__init__(auth_error)
+        self.err = auth_error
 
 
-class ChatGPTRateLimitError(openai.RateLimitError):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+class ChatGPTRateLimitError(BaseException):
+    def __init__(self, rate_error: openai.RateLimitError):
+        super().__init__(rate_error)
+        self.err = rate_error
 
 
 ChatCompletion = openai.ChatCompletion  # pylint: disable=no-member
