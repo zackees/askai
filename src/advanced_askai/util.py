@@ -1,4 +1,5 @@
 import argparse
+from getpass import getpass
 
 from advanced_askai.openaicfg import create_or_load_config, save_config
 
@@ -10,7 +11,9 @@ def load_or_prompt_for_api_key_and_return_config(args: argparse.Namespace) -> di
         save_config(config)
         config = create_or_load_config()
     elif "openai_key" not in config:
-        key = input("No OpenAi key found, please enter one now: ")
+        key = getpass(
+            "No OpenAI key found, please enter one now (input will be hidden): "
+        )
         config["openai_key"] = key
         save_config(config)
     return config
