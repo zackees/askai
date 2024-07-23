@@ -8,7 +8,10 @@ from advanced_askai.chatgpt import (
     ChatGPTConnectionError,
     ChatGPTRateLimitError,
 )
-from advanced_askai.interactive_chat_session import interactive_chat_session
+from advanced_askai.interactive_chat_session import (
+    interactive_chat_session,
+    single_chat_session,
+)
 from advanced_askai.openaicfg import create_or_load_config, save_config
 from advanced_askai.parse_args import parse_args
 from advanced_askai.prompt_input import prompt_input
@@ -45,7 +48,6 @@ def cli() -> int:
         ai_assistant_prompt = args.assistant_prompt
 
     log(prompt)
-    prompts = [prompt]
 
     chatbot = ChatBot(
         openai_key=key,
@@ -56,10 +58,24 @@ def cli() -> int:
     )
 
     try:
+        interactive = prompt is None
+        if not interactive:
+            single_chat_session(
+                chatbot=chatbot,
+                prompt=prompt,
+                output=args.output,
+                as_json=args.json,
+                check=args.check,
+                no_stream=args.no_stream,
+                status_print_func=print,
+            )
+            return 0
+        print(
+            "\nInteractive mode - press return three times to submit your code to OpenAI"
+        )
         interactive_chat_session(
             chatbot=chatbot,
-            prompt=prompt,
-            prompts=prompts,
+            prompts=[],
             output=args.output,
             as_json=args.json,
             no_stream=args.no_stream,

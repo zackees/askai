@@ -112,6 +112,7 @@ class ChatStream:
         return self.chatcompletion.response
 
     def __iter__(self):
+        all_str = ""
         for event in self.chatcompletion:
             choice = event.choices[0]
             delta = choice.delta
@@ -120,6 +121,10 @@ class ChatStream:
                 break
             if not self.no_stream:
                 yield event_text
+            else:
+                all_str += event_text
+        if self.no_stream:
+            yield all_str
 
 
 class ChatBot:

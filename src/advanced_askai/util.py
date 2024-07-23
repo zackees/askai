@@ -42,3 +42,10 @@ def get_model_max_tokens(args: argparse.Namespace) -> tuple[str, int]:
 def authentication_exists() -> bool:
     config = create_or_load_config()
     return "openai_key" in config
+
+
+def get_authentication() -> str | None:
+    config = create_or_load_config()
+    key = config.get("openai_key")
+    key = key or None
+    return key

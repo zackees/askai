@@ -7,21 +7,22 @@ from advanced_askai.run_chat_query import run_chat_query
 from advanced_askai.streams import NullOutStream, OutStream
 
 
-def single_chat_session(
+def _iterate_chat_session(
     chatbot: ChatBot,
-    prompt: str,
+    prompts: list[str],
     output: Optional[str],
     as_json: bool,
     no_stream: bool,
     check: bool,
+    status_print_func: Callable[[str], None] = print,
 ) -> str:
     """Runs a single chat query, throws exceptions if there are issues"""
+    assert len(prompts) % 2 == 1, "Prompt count should be odd"
     output_stream: OutStream = OutStream(output)
     if check:
         # if we're checking, we need to use a null output stream
         output_stream.close()
         output_stream = NullOutStream()
-    prompts = [prompt]
     try:
         response_text = run_chat_query(
             chatbot=chatbot,
@@ -37,9 +38,9 @@ def single_chat_session(
         prompts.append(response_text)
         output_stream.close()
         output_stream = OutStream(output)
-        check_prompt = AI_ASSISTANT_CHECKER_PROMPT + "\n\n" + prompt
+        check_prompt = AI_ASSISTANT_CHECKER_PROMPT + "\n\n" + prompts[-1]
         prompts.append(check_prompt)
-        print("\n############ CHECKING RESPONSE")
+        status_print_func("\n############ CHECKING RESPONSE")
         response_text = run_chat_query(
             chatbot=chatbot,
             prompts=prompts,
@@ -49,16 +50,35 @@ def single_chat_session(
             output=output,
             print_status=False,
         )
-        output_stream.close()
         return response_text
     finally:
         output_stream.close()
 
 
+def single_chat_session(
+    chatbot: ChatBot,
+    prompt: str,
+    output: Optional[str],
+    as_json: bool,
+    no_stream: bool,
+    check: bool,
+    status_print_func: Callable[[str], None] = print,
+) -> str:
+    """Runs a single chat query, throws exceptions if there are issues"""
+    prompts = [prompt]
+    return _iterate_chat_session(
+        chatbot=chatbot,
+        prompts=prompts,
+        output=output,
+        as_json=as_json,
+        no_stream=no_stream,
+        check=check,
+    )
+
+
 def interactive_chat_session(
     chatbot: ChatBot,
     prompts: list[str],
-    prompt: Optional[str],
     output: Optional[str],
     as_json: bool,
     no_stream: bool,
@@ -67,12 +87,13 @@ def interactive_chat_session(
     status_print_func: Callable[[str], None] = print,
 ) -> None:
     """Runs a chat query, throws exceptions if there are issues"""
-    interactive = not prompt
-    if interactive:
-        print(
-            "\nInteractive mode - press return three times to submit your code to OpenAI"
-        )
+    assert (
+        len(prompts) % 2 == 0
+    ), "Pre-populated prompts (indicating previous history) should be even"
+
     while True:
+        next_prompt = prompt_input_func()
+        prompts.append(next_prompt)
         new_cmd = prompts[-1].strip().replace("()", "")
         if new_cmd.startswith("!"):
             prompts = prompts[0:-1]
@@ -85,19 +106,13 @@ def interactive_chat_session(
         elif new_cmd == "exit":
             status_print_func("Exited due to 'exit' command")
             return
-
-        response_text = single_chat_session(
+        assert len(prompts) % 2 == 1, "Prompt count should be odd"
+        response_text = _iterate_chat_session(
             chatbot=chatbot,
-            prompt="\n".join(prompts),
+            prompts=prompts,
             output=output,
             as_json=as_json,
             no_stream=no_stream,
             check=check,
         )
         prompts.append(response_text)
-
-        if not interactive:
-            return
-
-        # next loop.
-        prompts.append(prompt_input_func())
