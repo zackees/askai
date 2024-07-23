@@ -1,7 +1,7 @@
 from typing import Callable
 
 from advanced_askai.chatgpt import ChatBot
-from advanced_askai.interactive_chat_session import (
+from advanced_askai.internal_chat_session import (
     internal_interactive_chat_session,
     internal_single_chat_session,
 )

@@ -7,7 +7,7 @@ from typing import Callable
 
 from advanced_askai.chatgpt import ChatBot
 from advanced_askai.constants import FAST_MODEL
-from advanced_askai.interactive_chat_session import internal_interactive_chat_session
+from advanced_askai.internal_chat_session import internal_interactive_chat_session
 from advanced_askai.streams import NullOutStream
 from advanced_askai.util import authentication_exists, get_authentication
 
