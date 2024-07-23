@@ -14,7 +14,7 @@ def _iterate_chat_session(
     as_json: bool,
     no_stream: bool,
     check: bool,
-    status_print_func: Callable[[str], None] = print,
+    status_print_func: Callable[[str], None],
 ) -> str:
     """Runs a single chat query, throws exceptions if there are issues"""
     assert len(prompts) % 2 == 1, "Prompt count should be odd"
@@ -73,6 +73,7 @@ def single_chat_session(
         as_json=as_json,
         no_stream=no_stream,
         check=check,
+        status_print_func=status_print_func,
     )
 
 
@@ -84,7 +85,7 @@ def interactive_chat_session(
     no_stream: bool,
     check: bool,
     prompt_input_func: Callable[[], str],
-    status_print_func: Callable[[str], None] = print,
+    status_print_func: Callable[[str], None],
 ) -> None:
     """Runs a chat query, throws exceptions if there are issues"""
     assert (
@@ -114,5 +115,6 @@ def interactive_chat_session(
             as_json=as_json,
             no_stream=no_stream,
             check=check,
+            status_print_func=status_print_func,
         )
         prompts.append(response_text)
