@@ -86,10 +86,14 @@ def ai_query(
     model: str,
     ai_assistant_prompt: str,
 ) -> ChatCompletion:
+
     # assert prompts is odd
     assert (
         len(prompts) % 2 == 1
     )  # Prompts alternate between user message and last response
+    if max_tokens < 0:
+        # take corrective action.
+        max_tokens = 16000  # override it and just send something big.
     messages = [
         {
             "role": "system",
