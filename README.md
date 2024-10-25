@@ -60,3 +60,8 @@ This environment requires you to use `git-bash`.
 # Linting
 
 Run `./lint.sh` to find linting errors using `pylint`, `flake8` and `mypy`.
+
+
+# Releases
+
+1.0.1 - If the max tokens goes negative, just set it to 16000.
