@@ -64,4 +64,5 @@ Run `./lint.sh` to find linting errors using `pylint`, `flake8` and `mypy`.
 
 # Releases
 
-1.0.1 - If the max tokens goes negative, just set it to 16000.
+  * 1.0.2 - Fixes openai dependency break: `openai>=1.3.7,<=1.55.3`
+  * 1.0.1 - If the max tokens goes negative, just set it to 16000.
